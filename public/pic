@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        section {
+            flex: 1;
+            display: flex;
+        }
+
+        nav {
+            background-color: #eee;
+            width: 200px;
+            padding: 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin-bottom: 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        iframe {
+            border: none;
+            flex: 1;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <header>
+            <h2>Sports</h2>
+        </header>
+        <section>
+            <nav>
+                <ul>
+                    <li><a href="cricket.html" target="display">CRICKET</a></li>
+                    <li><a href="football.html" target="display">FOOTBALL</a></li>
+                    <li><a href="basketball.html" target="display">BASKETBALL</a></li>
+                    <!-- Add other sports links here -->
+                </ul>
+            </nav>
+            <iframe src="home.html" name="display" height="100%" width="100%" title="Display Website"></iframe>
+        </section>
+        <footer>
+            <!-- Add footer content here -->
+        </footer>
+    </div>
+</body>
+</html>

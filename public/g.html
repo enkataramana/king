@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            width:50%;
+            height:50%;
+            align-items: fixed;
+          
+        }
+
+        .menu-icon {
+            display: block;
+            width: 30px;
+            height: 3px;
+            background-color: #26e92d;
+            margin: 6px auto;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .menu-icon.active {
+            background-color: transparent;
+            transform: rotate(45deg);
+        }
+
+        .menu-icon.active::before,
+        .menu-icon.active::after {
+            top: 0;
+            transform: rotate(90deg);
+        }
+
+        .menu-icon::before,
+        .menu-icon::after {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background-color:orange;
+            transition: transform 0.3s;
+        }
+
+        .menu-icon::before {
+            top: 1px;
+        }
+
+        .menu-icon::after {
+            top: 1px;
+        }
+
+        .menu-toggle {
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        .menu-name {
+            margin-left: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: rgb(202, 12, 18);
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: rgb(27, 43, 48);
+            transition: left 0.3s;
+            z-index: 998;
+        }
+
+        .menu.active {
+            left: 0;
+        }
+
+        .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 50px 0;
+        }
+
+        .menu ul li {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .menu ul li a {
+            color: greenyellow;
+            text-decoration: none;
+        }
+        
+    </style>
+</head>
+<body>
+    <img src="rr.jpg.png" alt="sports">
+        <div class="menu-toggle" onclick="toggleMenu()">
+        <div class="menu-icon"></div>
+        <div class="menu-name">dashboard</div>
+    </div>
+    <div class="menu" id="menu">
+        <ul>
+            
+                <li><a href="home.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="rr.html">Sports</a></li>
+                <li><a href="kinglogin.html"  >login</a></li>
+                <li><a href="kingsignup.html">signup</a></li>
+                <li><button onclick="closeMenu()">Close Menu</button></li>
+            </ul>
+        
+    </div>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            const menuIcon = document.querySelector('.menu-icon');
+
+            menu.classList.toggle('active');
+            menuIcon.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            const menu = document.getElementById('menu');
+            const menuIcon = document.querySelector('.menu-icon');
+
+            menu.classList.remove('active');
+            menuIcon.classList.remove('active');
+        }
+    </script>
+</body>
+</html> 
