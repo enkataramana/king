@@ -1,7 +1,10 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const passwordHash = require("password-hash"); // Corrected import
 const app = express();
 
 app.use(express.static('public'));
+
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 
@@ -12,40 +15,63 @@ initializeApp({
 });
 
 const db = getFirestore();
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.get("/signup", function (req, res) {
   res.sendFile(__dirname + "/public/" + "kingsignup.html");
 });
 
-app.get("/signupsubmit", function (req, res) {
-  db.collection("personal data")
-    .add({
-      FullName: req.query.FullName,
-      Email: req.query.Email,
-      password: req.query.password,
-    })
-    .then(() => {
-      res.send("signup successful. click here to <a href='/login'>login</a>");
+app.post("/signupsubmit", function (req, res) {
+  const { FullName, Email, password } = req.body;
+  db.collection("Details")
+    .where("Email", "==", Email) // Corrected field name to "Email"
+    .get()
+    .then((docs) => {
+      if (docs.size > 0) {
+        res.send("Hey user, this account already exists");
+      } else {
+        db.collection("Details").add({
+          FullName: FullName,
+          Email: Email,
+          password: passwordHash.generate(password) // Corrected function name
+        })
+        .then(() => {
+          const successMessage = "Signup Successful. Click here to <a href='/login'>Log in</a>.";
+          res.send(successMessage);
+        })
+        .catch((error) => {
+          console.error("Error during signup:", error);
+          res.send("An error occurred during signup. Please try again.");
+        });
+      }
     });
 });
 
 app.get("/login", function (req, res) {
   res.sendFile(__dirname + "/public/" + "kinglogin.html");
 });
-app.get("/gona", function (req, res) {
-    const providedEmail = req.query.Email;
-    const providedPassword = req.query.password;
+
+app.post("/gona", function (req, res) {
+    const providedEmail = req.body.Email; // Changed from req.query.Email
+    const providedPassword = req.body.password; // Changed from req.query.password
   
-    db.collection("personal data")
+    db.collection("Details") // Corrected collection name
       .where("Email", "==", providedEmail)
-      .where("password", "==", providedPassword)
       .get()
       .then((querySnapshot) => {
         if (querySnapshot.size === 1) {
-          // Login successful
-          res.send("Login successful. Click here to <a href='/Dashboard'>Dashboard</a>");
+          const userData = querySnapshot.docs[0].data();
+          if (passwordHash.verify(providedPassword, userData.password)) {
+            // Password matches
+            res.send("Login successful. Click here to <a href='/Dashboard'>Dashboard</a>");
+          } else {
+            // Password does not match
+            res.send("Login failed. Please check your credentials and <a href='/login'>try again</a>.");
+          }
         } else {
-          // Login failed
+          // No user found with the provided email
           res.send("Login failed. Please check your credentials and <a href='/login'>try again</a>.");
         }
       })
@@ -54,9 +80,6 @@ app.get("/gona", function (req, res) {
         res.send("An error occurred during login. Please try again.");
       });
   });
-  
-
-
 
 app.get("/Dashboard", function (req, res) {
   res.sendFile(__dirname + "/public/" + "g.html");
